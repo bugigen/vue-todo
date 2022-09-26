@@ -1,19 +1,96 @@
 <template>
-    <div>Hello</div>
+  <div class="app">
+    <todo-input @addTodo="addTodo"></todo-input>
+    <todo-list>
+      <todo-item
+        v-for="item in items"
+        :key="item.id"
+        :item="item"
+        @checkItem="checkItem"
+        @deleteTodo="deleteTodo"
+      ></todo-item>
+    </todo-list>
+  </div>
 </template>
 
 <script>
+import TodoList from "@/components/TodoList";
+import TodoItem from "@/components/TodoItem";
+import TodoInput from "@/components/TodoInput";
 
 export default {
   name: 'App',
+  data() {
+    return {
+      items: [
+        {
+          id: 1,
+          todo: "Learning Vue",
+          completed: false
+        },
+        {
+          id: 2,
+          todo: "Watch a movie",
+          completed: true
+        }
+      ]
+    }
+  },
+  computed: {
+    itemsLength() {
+      return this.items.length;
+    },
+    getId() {
+      if (this.itemsLength) {
+        return this.items[this.itemsLength - 1].id + 1;
+      }
+      return 1;
+    }
+  },
+  methods: {
+    addTodo(todo) {
+      this.items.push({
+        id: this.getId,
+        todo,
+        completed: false
+      })
+    },
+    checkItem(id) {
+      this.items = this.items.map(item => {
+        if (item.id === id) {
+          return {...item, completed: !item.completed};
+        }
+        return item;
+      })
+    },
+    deleteTodo(id) {
+      this.items = this.items.filter(item => item.id !== id);
+    }
+  },
   components: {
-
+    TodoList,
+    TodoItem,
+    TodoInput
   }
 }
 </script>
 
 <style>
-    body {
-        background: #e1e1e1;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #e1e1e1;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  margin: 50px auto;
+  width: 500px;
+  padding: 20px;
+  border: 2px solid #fff;
+}
 </style>
