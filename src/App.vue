@@ -1,13 +1,17 @@
 <template>
   <div class="app">
     <todo-input @addTodo="addTodo"></todo-input>
-    <todo-list>
+    <todo-list
+      @setStatus="setStatus"
+    >
       <todo-item
+        @deleteTodo="deleteTodo"
+        @updateTodo="updateTodo"
+        @checkItem="checkItem"
         v-for="item in items"
         :key="item.id"
         :item="item"
-        @checkItem="checkItem"
-        @deleteTodo="deleteTodo"
+        :status="status"
       ></todo-item>
     </todo-list>
   </div>
@@ -33,7 +37,8 @@ export default {
           todo: "Watch a movie",
           completed: true
         }
-      ]
+      ],
+      status: null,
     }
   },
   computed: {
@@ -65,6 +70,17 @@ export default {
     },
     deleteTodo(id) {
       this.items = this.items.filter(item => item.id !== id);
+    },
+    updateTodo(todo) {
+      this.items = this.items.map(item => {
+        if (item.id === todo.id) {
+          return {...todo};
+        }
+        return item;
+      })
+    },
+    setStatus(val) {
+      this.status = val;
     }
   },
   components: {

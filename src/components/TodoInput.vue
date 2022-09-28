@@ -14,7 +14,10 @@ export default {
   },
   methods: {
     addTodo() {
-      this.$emit('addTodo', this.todo);
+      if (this.todo !== '') {
+        this.$emit('addTodo', this.todo);
+        this.todo = '';
+      }
     }
   },
   components: {}

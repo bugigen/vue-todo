@@ -1,10 +1,17 @@
 <template>
-  <div class="todo-item">
+  <div class="todo-item" v-show="status === null || status === item.completed">
     <div class="controls">
-      <div class="edit"><font-awesome-icon icon="fa-solid fa-pen-to-square" /></div>
-      <div class="delete" @click="deleteTodo"><font-awesome-icon icon="fa-solid fa-trash-can" /></div>
+      <div class="edit" @click="editMode = !editMode">
+        <font-awesome-icon icon="fa-solid fa-pen-to-square"/>
+      </div>
+      <div class="delete" @click="deleteTodo">
+        <font-awesome-icon icon="fa-solid fa-trash-can"/>
+      </div>
     </div>
-    <div :class="{throw: item.completed}">{{ item.todo }}</div>
+    <div v-if="editMode">
+      <input type="text" v-model="todo.todo" @keydown.enter="updateTodo">
+    </div>
+    <div v-else :class="{throw: item.completed}">{{ item.todo }}</div>
     <div>
       <input type="checkbox" :checked="item.completed" @click="check">
     </div>
@@ -13,10 +20,13 @@
 
 <script>
 export default {
-  props: ['item'],
+  props: ['item', 'status'],
   name: "TodoItem",
   data() {
-    return {}
+    return {
+      todo: this.item,
+      editMode: false,
+    }
   },
   methods: {
     check() {
@@ -24,7 +34,13 @@ export default {
     },
     deleteTodo() {
       this.$emit('deleteTodo', this.item.id);
-    }
+    },
+    updateTodo() {
+      if (this.todo.todo !== '') {
+        this.$emit('updateTodo', this.todo);
+        this.editMode = false;
+      }
+    },
   },
   components: {}
 }
