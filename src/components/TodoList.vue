@@ -39,14 +39,16 @@ export default {
 
 button {
   margin: 0 5px;
-  background: #eee;
-  border: none;
+  background: aqua;
+  border: 3px solid #fff;
   padding: 5px 10px;
   border-radius: 3px;
+  color: #464630;
 }
 
 button:hover {
   cursor: pointer;
+  background: #68c2c2;
 }
 
 button:focus {
